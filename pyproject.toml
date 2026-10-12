@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Curated dataset of public API rate limits (requests per minute, burst) in CSV/JSON form, helping developers avoid throttling surprises."
 requires-python = ">=3.11"
 license = { text = "MIT" }
-dependencies = []
+dependencies = ["click>=8.1"]
+
+[project.scripts]
+ratelens = "ratelens.cli:cli"
 
 [project.optional-dependencies]
 dev = [
