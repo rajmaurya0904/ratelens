@@ -1,0 +1,4 @@
+api,endpoint,requests_per_minute,burst
+github,/repos/{owner}/{repo}/issues,5000,1000
+twitter,/2/tweets,300,50
+stripe,/v1/charges,100,20
