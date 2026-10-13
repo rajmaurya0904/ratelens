@@ -2,7 +2,7 @@
 
 **Curated dataset of public API rate limits (requests per minute, burst) in CSV/JSON form, helping developers avoid throttling surprises.**
 
-<!-- THE PROBLEM: 2-3 concrete lines on the annoying thing this removes. -->
+Developers integrating multiple APIs often face unexpected throttling, leading to failed requests and disrupted workflows. Keeping track of varying rate limits across services is error-prone and time-consuming. RateLens provides a centralized, up-to-date dataset to help developers avoid throttling.
 
 ## Example
 
