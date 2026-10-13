@@ -20,7 +20,7 @@ pip install -e ".[dev]"
 
 ## How it works
 
-<!-- 3-6 bullets: what it checks, computes or produces. -->
+RateLens loads a CSV file that lists public API rate limits, parses each row into a `RateLimit` object, and exposes a lookup function that searches the data by API name and endpoint, returning the matching `RateLimit` or `None` if no match is found.
 
 ## Limitations
 
