@@ -24,7 +24,7 @@ RateLens loads a CSV file that lists public API rate limits, parses each row int
 
 ## Limitations
 
-<!-- Honest and short: what it does NOT do, known gaps. -->
+The dataset is community‑curated and may be incomplete; it may not cover all APIs and relies on contributions.
 
 ## Development
 
