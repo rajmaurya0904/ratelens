@@ -1,4 +1,34 @@
-api,endpoint,requests_per_minute,burst
-github,/repos/{owner}/{repo}/issues,5000,1000
-twitter,/2/tweets,300,50
-stripe,/v1/charges,100,20
+api,endpoint,requests_per_minute,burst,limit,window_seconds,scope,source,verified,notes
+github,/*,83.33,,5000,3600,per authenticated user,https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api,2026-10-24,"Personal access tokens and OAuth apps; some GitHub Enterprise Cloud apps get 15000. Secondary limits also apply: 100 concurrent requests, 900 points/min (GET costs 1, writes cost 5)."
+github,/*,1,,60,3600,"per IP, unauthenticated",https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api,2026-10-24,Unauthenticated requests share the originating IP's allowance.
+github,/search/*,30,,30,60,per authenticated user,https://docs.github.com/en/rest/search/search,2026-10-24,All search endpoints except code search. Unauthenticated search is 10/min.
+github,/search/code,10,,10,60,per authenticated user,https://docs.github.com/en/rest/search/search,2026-10-24,Code search requires authentication.
+stripe,/*,6000,,100,1,"per account, live mode",https://docs.stripe.com/rate-limits,2026-10-24,Global limit; concurrency limit of 50 in-progress requests also applies.
+stripe,/*,1500,,25,1,"per account, sandbox",https://docs.stripe.com/rate-limits,2026-10-24,Global limit in sandbox.
+stripe,/v1/*,1500,,25,1,per endpoint,https://docs.stripe.com/rate-limits,2026-10-24,"Each named operation (for example POST /v1/payment_intents) is a separate endpoint, unless noted otherwise."
+stripe,/v1/files,1200,,20,1,read and write each,https://docs.stripe.com/rate-limits,2026-10-24,Files API: 20 reads/s and 20 writes/s.
+stripe,/v1/*/search,1200,,20,1,read requests,https://docs.stripe.com/rate-limits,2026-10-24,Search API.
+slack,/api/tier1,1,,1,60,per method per workspace,https://docs.slack.dev/apis/web-api/rate-limits,2026-10-24,Documented as 1+ per minute; the page lists which methods are Tier 1.
+slack,/api/tier2,20,,20,60,per method per workspace,https://docs.slack.dev/apis/web-api/rate-limits,2026-10-24,Documented as 20+ per minute.
+slack,/api/tier3,50,,50,60,per method per workspace,https://docs.slack.dev/apis/web-api/rate-limits,2026-10-24,Documented as 50+ per minute.
+slack,/api/tier4,100,,100,60,per method per workspace,https://docs.slack.dev/apis/web-api/rate-limits,2026-10-24,Documented as 100+ per minute.
+slack,/api/chat.postMessage,60,,1,1,per channel,https://docs.slack.dev/apis/web-api/rate-limits,2026-10-24,Short bursts above 1/s are tolerated; sustained overuse is limited.
+discord,/*,3000,,50,1,per bot (per IP without Authorization header),https://docs.discord.com/developers/topics/rate-limits,2026-10-24,Global limit; per-route limits are reported in response headers. 10000 invalid (401/403/429) requests in 10 minutes gets the IP banned.
+notion,/v1/*,180,,180,60,"per integration, standard plans",https://developers.notion.com/reference/request-limits,2026-10-24,Average 3 requests/s. Data source queries have a separate limit of about 3/s.
+notion,/v1/*,600,,600,60,"per integration, Business and Enterprise",https://developers.notion.com/reference/request-limits,2026-10-24,Average 10 requests/s.
+airtable,/v0/{baseId}/*,300,,5,1,per base,https://airtable.com/developers/web/api/rate-limits,2026-10-24,"After a 429, wait 30 seconds."
+airtable,/v0/*,3000,,50,1,"per user, shared across tokens",https://airtable.com/developers/web/api/rate-limits,2026-10-24,Applies across all of a user's personal access tokens and service accounts.
+cloudflare,/client/v4/*,240,,1200,300,"per user, across dashboard, keys and tokens",https://developers.cloudflare.com/fundamentals/api/reference/limits/,2026-10-24,Exceeding it blocks all API calls for the next 5 minutes.
+hubspot,/*,600,,100,10,"per private app, Free and Starter",https://developers.hubspot.com/docs/api/usage-details,2026-10-24,Daily limit 250000 per account.
+hubspot,/*,1140,,190,10,"per private app, Professional and Enterprise",https://developers.hubspot.com/docs/api/usage-details,2026-10-24,Daily limit 625000 (Professional) or 1000000 (Enterprise) per account.
+hubspot,/*,660,,110,10,"per installing account, Marketplace OAuth apps",https://developers.hubspot.com/docs/api/usage-details,2026-10-24,Excludes the CRM Search API; the same at every tier.
+telegram,/bot*/sendMessage,60,,1,1,per chat,https://core.telegram.org/bots/faq,2026-10-24,About 1 message/s to a single chat; short bursts are allowed.
+telegram,/bot*/sendMessage,20,,20,60,per group,https://core.telegram.org/bots/faq,2026-10-24,At most 20 messages/min in a group.
+telegram,/bot*/*,1800,,30,1,"bulk notifications, free",https://core.telegram.org/bots/faq,2026-10-24,About 30 messages/s across different users.
+googlemaps,/maps/api/geocode/*,3000,,3000,60,per project,https://developers.google.com/maps/documentation/geocoding/usage-and-billing,2026-10-24,Geocoding API. Geocoding API v4 methods have a default of 25 queries/s.
+openmeteo,/v1/forecast,600,,600,60,"per IP, free non-commercial",https://open-meteo.com/en/pricing,2026-10-24,"Free tier is also capped at 5000/hour, 10000/day and 300000/month."
+openmeteo,/v1/forecast,83.33,,5000,3600,"per IP, free non-commercial",https://open-meteo.com/en/pricing,2026-10-24,Hourly cap of the free tier.
+openmeteo,/v1/forecast,6.94,,10000,86400,"per IP, free non-commercial",https://open-meteo.com/en/pricing,2026-10-24,Daily cap of the free tier.
+openweathermap,/data/2.5/weather,60,,60,60,"per API key, free plan",https://openweathermap.org/price,2026-10-24,Current Weather API; the free plan is also capped at 1000000 calls/month.
+youtube,/youtube/v3/videos,6.94,,10000,86400,"per project, in quota units",https://developers.google.com/youtube/v3/determine_quota_cost,2026-10-24,"Quota units, not requests: videos.list costs 1 unit. The 10000 units/day default is shared by most methods."
+youtube,/youtube/v3/search,0.07,,100,86400,per project,https://developers.google.com/youtube/v3/determine_quota_cost,2026-10-24,search.list costs 1 unit but is capped at 100 calls/day on the default quota.
