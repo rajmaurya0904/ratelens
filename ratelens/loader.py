@@ -87,25 +87,30 @@ def load_rate_limits(path: str | Path | None = None) -> list[RateLimit]:
     except OSError as exc:
         raise DataError(f"cannot read {target}: {exc.strerror or exc}") from exc
     with handle:
-        reader = csv.DictReader(handle)
-        header = [h.strip() for h in (reader.fieldnames or [])]
-        missing = [f for f in REQUIRED if f not in header]
-        if missing:
-            raise DataError(
-                f"{target}: header is missing {', '.join(missing)} "
-                f"(expected columns: {', '.join(CSV_FIELDS)})"
-            )
-        reader.fieldnames = header
-        limits: list[RateLimit] = []
         try:
-            for row in reader:
-                if row.get(None):
-                    raise DataError(f"line {reader.line_num}: too many fields")
-                if not any((v or "").strip() for v in row.values()):
-                    continue
-                limits.append(parse_row(row, reader.line_num))
+            return _read(handle, target)
         except UnicodeDecodeError as exc:
             raise DataError(f"{target}: not valid UTF-8 text") from exc
-        except csv.Error as exc:
-            raise DataError(f"{target}: malformed CSV: {exc}") from exc
+
+
+def _read(handle, target: Path) -> list[RateLimit]:
+    reader = csv.DictReader(handle)
+    header = [h.strip() for h in (reader.fieldnames or [])]
+    missing = [f for f in REQUIRED if f not in header]
+    if missing:
+        raise DataError(
+            f"{target}: header is missing {', '.join(missing)} "
+            f"(expected columns: {', '.join(CSV_FIELDS)})"
+        )
+    reader.fieldnames = header
+    limits: list[RateLimit] = []
+    try:
+        for row in reader:
+            if row.get(None):
+                raise DataError(f"line {reader.line_num}: too many fields")
+            if not any((v or "").strip() for v in row.values()):
+                continue
+            limits.append(parse_row(row, reader.line_num))
+    except csv.Error as exc:
+        raise DataError(f"{target}: malformed CSV: {exc}") from exc
     return limits
